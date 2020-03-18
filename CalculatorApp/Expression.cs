@@ -1,12 +1,9 @@
 using System;
 using System.IO;
 
-namespace ExpressionLibrary{
-    public class Expression{
-        public Expression(){}
-        virtual public double solve(){
-            return 0;
-        }
+abstract public class Expression{
+    public Expression(){}
+    abstract public double solve();
 
         public static void Main(String[] args){
             // debugging
@@ -39,15 +36,13 @@ namespace ExpressionLibrary{
         }
     }
 
-    public class UnaryExpression : Expression{
-        protected Expression x;
-        public UnaryExpression(Expression x){
-            this.x = x;
-        }
-        virtual public double solve(){
-            return 0;
-        }
+abstract public class UnaryExpression : Expression{
+    protected Expression x;
+    public UnaryExpression(Expression x){
+        this.x = x;
     }
+    abstract public override double solve();
+}
 
     public class PositiveExpression : UnaryExpression{
         public PositiveExpression(Expression T) : base(T){}
@@ -70,17 +65,15 @@ namespace ExpressionLibrary{
         }
     }
 
-    public class BinaryExpression : Expression{
-        protected Expression x;
-        protected Expression y;
-        public BinaryExpression(Expression x, Expression y){
-            this.x = x;
-            this.y = y;
-        }
-        virtual public double solve(){
-            return 0;
-        }
+abstract public class BinaryExpression : Expression{
+    protected Expression x;
+    protected Expression y;
+    public BinaryExpression(Expression x, Expression y){
+        this.x = x;
+        this.y = y;
     }
+    abstract public override double solve();
+}
 
     public class AddExpression : BinaryExpression{
         public AddExpression(Expression x, Expression y) : base(x,y){}
