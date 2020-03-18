@@ -8,25 +8,25 @@ namespace ExpressionLibrary{
             return 0;
         }
 
-        // public static void Main(String[] args){
-        //     // debugging
-        //     TerminalExpresion a = new TerminalExpresion(2);
-        //     TerminalExpresion b = new TerminalExpresion(3);
+        public static void Main(String[] args){
+            // debugging
+            TerminalExpresion a = new TerminalExpresion(2);
+            TerminalExpresion b = new TerminalExpresion(3);
 
-        //     AddExpression c = new AddExpression(a, b);
-        //     SubstractExpression d = new SubstractExpression(a, b);
-        //     MultiplyExpression e = new MultiplyExpression(a, b);
-        //     DivideExpression f = new DivideExpression(a, b);
+            AddExpression c = new AddExpression(a, b);
+            SubstractExpression d = new SubstractExpression(a, b);
+            MultiplyExpression e = new MultiplyExpression(a, b);
+            DivideExpression f = new DivideExpression(a, b);
 
-        //     TerminalExpresion g = new TerminalExpresion(e.solve());
-        //     DivideExpression h = new DivideExpression(g, b);
+            TerminalExpresion g = new TerminalExpresion(e.solve());
+            DivideExpression h = new DivideExpression(g, b);
 
-        //     Console.WriteLine(c.solve()); // a + b
-        //     Console.WriteLine(d.solve()); // a - b
-        //     Console.WriteLine(e.solve()); // a * b
-        //     Console.WriteLine(f.solve()); // a / b
-        //     Console.WriteLine(h.solve()); // (a * b) / b
-        // }
+            Console.WriteLine(c.solve()); // a + b
+            Console.WriteLine(d.solve()); // a - b
+            Console.WriteLine(e.solve()); // a * b
+            Console.WriteLine(f.solve()); // a / b
+            Console.WriteLine(h.solve()); // (a * b) / b
+        }
     }
 
     public class TerminalExpresion : Expression{
