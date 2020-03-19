@@ -44,7 +44,7 @@ namespace CalculatorApp
 
         private void button16_Click(object sender, EventArgs e)
         {
-            result.Text = "0";
+
         }
 
         private void operator_Click(object sender, EventArgs e)
@@ -82,6 +82,7 @@ namespace CalculatorApp
         {
             result.Clear();
             value = 0;
+            result.Text = "0";
         }
 
         private void label1_Click(object sender, EventArgs e)
