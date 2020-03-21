@@ -102,4 +102,3 @@ abstract public class BinaryExpression : Expression{
             return x.solve() / y.solve();
         }
     }
-}
