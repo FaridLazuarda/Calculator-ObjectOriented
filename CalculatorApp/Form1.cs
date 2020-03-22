@@ -31,22 +31,26 @@ namespace CalculatorApp
 
         private void button_Click(object sender, EventArgs e)
         {
-            if((result.Text == "0")||(operation_pressed))
-            {
-                result.Clear();
-            }
-            operation_pressed = false;
+            
             Button b = (Button)sender;
-            if(b.Text == ".")
+            if (b.Text == ".")
             {
-                if(!result.Text.Contains("."))
+                if (!result.Text.Contains("."))
                 {
                     result.Text = result.Text + b.Text;
                 }
-            } else
+            }
+            else
             {
+                if ((result.Text == "0") || (operation_pressed))
+                {
+                    result.Clear();
+                }
                 result.Text = result.Text + b.Text;
             }
+            operation_pressed = false;
+
+
         }
 
         private void button16_Click(object sender, EventArgs e)

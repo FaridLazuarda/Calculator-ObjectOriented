@@ -56,7 +56,16 @@ public class RootExpression : UnaryExpression
     public RootExpression(Expression T) : base(T) { }
     public override double solve()
     {
-        return Math.Sqrt(x.solve());
+        double result = Math.Sqrt(x.solve());
+        if(!Double.IsNaN(result))
+        {
+            return result;
+        }
+        else
+        {
+            throw (new NegativeRootException("Exception: Negative value in Root"));
+        }
+        
     }
 }
 
@@ -104,7 +113,13 @@ public class DivideExpression : BinaryExpression
     public DivideExpression(Expression x, Expression y) : base(x, y) { }
     public override double solve()
     {
-        return x.solve() / y.solve();
+        double result;
+        result = x.solve() / y.solve();
+        if (Double.IsInfinity(result))
+        {
+            throw (new DivisionByZeroException("Exception: Division by Zero"));
+        }
+        return result;
     }
 }
 
@@ -144,14 +159,36 @@ public class Elemen<T>
 }
 
 //namespace CalculatorDefinedException{
-public class ExpressionSyntaxErrorException : Exception
+
+public class CalculatorException : Exception
+{
+    public CalculatorException(string message) : base(message)
+    {
+
+    }
+}
+public class ExpressionSyntaxErrorException : CalculatorException
 {
     public ExpressionSyntaxErrorException(string message) : base(message)
     {
 
     }
 }
-//}
+
+public class NegativeRootException : CalculatorException
+{
+    public NegativeRootException(string message): base(message)
+    {
+    }
+}
+
+public class DivisionByZeroException : CalculatorException
+{
+    public DivisionByZeroException(string message): base(message)
+    {
+
+    }
+}
 
 
 /********************************/
@@ -207,9 +244,9 @@ public class QueueProcessor
             parseInfixToPostfix();
             result = solvePostfixQueue();
         }
-        catch (ExpressionSyntaxErrorException e)
+        catch (CalculatorException e)
         {
-            Console.WriteLine(e);
+            throw(e);
         }
 
         return result;
@@ -557,34 +594,41 @@ public class QueueProcessor
 }
 
 
-//public class StackProcessorTest
-//{
-//    public static void Main(String[] args)
-//    {
-//        //Stack<Elemen<string>> stackList = new Stack<Elemen<string>>();
-//        //StackProcessor stackProcessor = new StackProcessor();
-//
-//        Queue<Elemen<string>> queueList = new Queue<Elemen<string>>();
-//        QueueProcessor queueProcessor = new QueueProcessor();
-//        queueProcessor.setQueue(queueList);
-//
-//        //Elemen<string> a = new Elemen<string>("-");
-///        //queueList.Enqueue(a); 
-//        //Elemen<string> a = new Elemen<string>("-");
-//        Elemen<string> a = new Elemen<string>("1");
-//        queueList.Enqueue(a);
-//        a = new Elemen<string>("+");
-//        queueList.Enqueue(a);
-//        a = new Elemen<string>("-");
-//        queueList.Enqueue(a);
-//        a = new Elemen<string>("2");
-//        queueList.Enqueue(a);
-//        a = new Elemen<string>("-");
-//        queueList.Enqueue(a);
-//        a = new Elemen<string>("3");
-//       queueList.Enqueue(a);
+public class StackProcessorTest
+{
+    public static void Main(String[] args)
+    {
+        //Stack<Elemen<string>> stackList = new Stack<Elemen<string>>();
+        //StackProcessor stackProcessor = new StackProcessor();
 
-//        Console.WriteLine(queueProcessor.solveQueue());
+        Queue<Elemen<string>> queueList = new Queue<Elemen<string>>();
+        QueueProcessor queueProcessor = new QueueProcessor();
+        queueProcessor.setQueue(queueList);
+        double result = 0;
 
-//    }
-//}
+        //Elemen<string> a = new Elemen<string>("-");
+        //queueList.Enqueue(a); 
+        //Elemen<string> a = new Elemen<string>("-");
+        Elemen<string> a = new Elemen<string>("1");
+        queueList.Enqueue(a);
+        a = new Elemen<string>("+");
+        queueList.Enqueue(a);
+        a = new Elemen<string>("-");
+        queueList.Enqueue(a);
+        a = new Elemen<string>("2");
+        queueList.Enqueue(a);
+        a = new Elemen<string>("/");
+        queueList.Enqueue(a);
+        a = new Elemen<string>("0");
+        queueList.Enqueue(a);
+        try
+        {
+            result = (queueProcessor.solveQueue());
+        }
+        catch (CalculatorException e)
+        {
+            Console.WriteLine(e);
+        }
+        Console.WriteLine(result);
+    }
+}
