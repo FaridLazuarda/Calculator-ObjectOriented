@@ -7,3 +7,12 @@ C:\Users\Farid Lazuarda\Documents\GitHub\Calculator-ObjectOriented\CalculatorApp
 C:\Users\Farid Lazuarda\Documents\GitHub\Calculator-ObjectOriented\CalculatorApp\obj\Debug\CalculatorApp.csproj.GenerateResource.cache
 C:\Users\Farid Lazuarda\Documents\GitHub\Calculator-ObjectOriented\CalculatorApp\obj\Debug\CalculatorApp.exe
 C:\Users\Farid Lazuarda\Documents\GitHub\Calculator-ObjectOriented\CalculatorApp\obj\Debug\CalculatorApp.pdb
+D:\ITB\[SEMESTER 4]\OOP\Tubes 1\Calculator-ObjectOriented\CalculatorApp\bin\Debug\CalculatorApp.exe.config
+D:\ITB\[SEMESTER 4]\OOP\Tubes 1\Calculator-ObjectOriented\CalculatorApp\bin\Debug\CalculatorApp.exe
+D:\ITB\[SEMESTER 4]\OOP\Tubes 1\Calculator-ObjectOriented\CalculatorApp\bin\Debug\CalculatorApp.pdb
+D:\ITB\[SEMESTER 4]\OOP\Tubes 1\Calculator-ObjectOriented\CalculatorApp\obj\Debug\CalculatorApp.csprojAssemblyReference.cache
+D:\ITB\[SEMESTER 4]\OOP\Tubes 1\Calculator-ObjectOriented\CalculatorApp\obj\Debug\CalculatorApp.Form1.resources
+D:\ITB\[SEMESTER 4]\OOP\Tubes 1\Calculator-ObjectOriented\CalculatorApp\obj\Debug\CalculatorApp.Properties.Resources.resources
+D:\ITB\[SEMESTER 4]\OOP\Tubes 1\Calculator-ObjectOriented\CalculatorApp\obj\Debug\CalculatorApp.csproj.GenerateResource.cache
+D:\ITB\[SEMESTER 4]\OOP\Tubes 1\Calculator-ObjectOriented\CalculatorApp\obj\Debug\CalculatorApp.exe
+D:\ITB\[SEMESTER 4]\OOP\Tubes 1\Calculator-ObjectOriented\CalculatorApp\obj\Debug\CalculatorApp.pdb
