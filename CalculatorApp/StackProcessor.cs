@@ -108,28 +108,39 @@ public class DivideExpression : BinaryExpression
     }
 }
 
-public class QueueElmt
+public class Elemen<T> 
 {
-    public Tuple<string, double> elmtStack;
-    public QueueElmt(string elmt)
+    protected T elmt1;
+    protected double elmt2;
+    public Elemen(T elmt)
     {
-        if (elmt.Equals("+") || elmt.Equals("-") || elmt.Equals("*") || elmt.Equals("/") || elmt.Equals("akar"))
-        {
-            elmtStack = new Tuple<string, double>(elmt, -1);
-        }
-        else
-        {
-            elmtStack = new Tuple<string, double>("#", Convert.ToDouble(elmt));
-        }
+	Type param = typeof(T);	
+	if (typeof(string).IsAssignableFrom(param))
+	{
+		if (elmt.Equals("+") || elmt.Equals("-") || elmt.Equals("*") || elmt.Equals("/") || elmt.Equals("akar"))
+    		{
+			elmt1 = elmt;
+			elmt2 = -1;
+    		}
+    		else 
+    		{
+			string s = "#";
+			elmt1 = (T)(object)s;
+			elmt2 = Convert.ToDouble(elmt);
+    		}
+	}else{
+		elmt1 = elmt;
+		elmt2 = 1;
+	}   
     }
-    public string GetItem1()
+    public T GetItem1()
     {
-        return this.elmtStack.Item1;
+        return this.elmt1;
     }
     public double GetItem2()
     {
-        return this.elmtStack.Item2;
-    }
+        return this.elmt2;
+    } 
 }
 
 //namespace CalculatorDefinedException{
@@ -149,8 +160,8 @@ public class ExpressionSyntaxErrorException : Exception
 public class QueueProcessor
 {
     /* KAMUS DATA */
-    Queue<QueueElmt> expressionInfixQueue;
-    Queue<QueueElmt> expressionPostfixQueue;
+    Queue<Elemen<string>> expressionInfixQueue;
+    Queue<Elemen<string>> expressionPostfixQueue;
     TerminalExpression terminal1, terminal2;
     String expresionOp;
     int terminalState;
@@ -164,12 +175,12 @@ public class QueueProcessor
         /** KAMUS LOKAL **/
 
         /** ALGORITMA **/
-        this.expressionInfixQueue = new Queue<QueueElmt>();
-        this.expressionPostfixQueue = new Queue<QueueElmt>();
+        this.expressionInfixQueue = new Queue<Elemen<string>>();
+        this.expressionPostfixQueue = new Queue<Elemen<string>>();
     }
 
     /***** Set Queue to Process *****/
-    public void setQueue(Queue<QueueElmt> queue)
+    public void setQueue(Queue<Elemen<string>> queue)
     {
         /** DESKRIPSI **/
 
@@ -210,8 +221,8 @@ public class QueueProcessor
         /* Me-parse ekspresi infix sekaligus mengecek semantik dari ekspresi tersebut */
 
         /** KAMUS LOKAL **/
-        Queue<QueueElmt> tempQueue;
-        QueueElmt tempElmt;
+        Queue<Elemen<string>> tempQueue;
+        Elemen<string> tempElmt;
         String operatorString;
         int state;  // integer yang melambangkan keadaan pembacaan sekarang
                     // 0 -> pembacaan selesai dan berhasil
@@ -221,7 +232,7 @@ public class QueueProcessor
         bool insert;
 
         /** ALGORITMA **/
-        tempQueue = new Queue<QueueElmt>();
+        tempQueue = new Queue<Elemen<string>>();
         negCount = 0;
         state = 1;  // dimulai dengan pembacaan terminal
 
@@ -252,7 +263,7 @@ public class QueueProcessor
                         if (negCount == 1)
                         {
                             Console.WriteLine("neg");
-                            tempElmt = new QueueElmt((tempElmt.GetItem2() * -1).ToString());
+                            tempElmt = new Elemen<string>((tempElmt.GetItem2() * -1).ToString());
                         }
                         Console.WriteLine("angka {0}", tempElmt.GetItem2());
                     }
@@ -310,12 +321,12 @@ public class QueueProcessor
         /* Mengubah ekspresi Infix pada queue menjadi Postfix */
 
         /** KAMUS DATA **/
-        Stack<QueueElmt> operatorStack;     // Stack untuk menyimpan urutan operator
-        QueueElmt queueTemp, stackTemp;
+        Stack<Elemen<string>> operatorStack;     // Stack untuk menyimpan urutan operator
+        Elemen<string> queueTemp, stackTemp;
         int operatorPrecedence;
 
         /** ALGORITMA **/
-        operatorStack = new Stack<QueueElmt>();
+        operatorStack = new Stack<Elemen<string>>();
 
         clearQueue(ref expressionPostfixQueue);
 
@@ -384,7 +395,7 @@ public class QueueProcessor
 
         /** KAMUS DATA **/
         Stack<TerminalExpression> operationStack;     // Stack untuk menyimpan nilai-nilai operasi
-        QueueElmt queueTemp;
+        Elemen<string> queueTemp;
         TerminalExpression term, term1, term2;
         Expression exp;
 
@@ -446,10 +457,10 @@ public class QueueProcessor
         return term.solve();
     }
 
-    public void printQueue(Queue<QueueElmt> queue)
+    public void printQueue(Queue<Elemen<string>> queue)
     {
-        Queue<QueueElmt> tempQueue = new Queue<QueueElmt>();
-        QueueElmt temp;
+        Queue<Elemen<string>> tempQueue = new Queue<Elemen<string>>();
+        Elemen<string> temp;
         while (queue.Count != 0)
         {
             temp = queue.Dequeue();
@@ -464,13 +475,13 @@ public class QueueProcessor
         }
     }
 
-    private void clearQueue(ref Queue<QueueElmt> queue)
+    private void clearQueue(ref Queue<Elemen<string>> queue)
     {
         /** DESKRIPSI **/
         /* Mengosongkan Queue sehingga dapat digunakan seperti awal */
 
         /** KAMUS DATA **/
-        QueueElmt temp;
+        Elemen<string> temp;
 
         /** ALGORITMA **/
         while (queue.Count != 0)
@@ -550,27 +561,27 @@ public class StackProcessorTest
 {
     public static void Main(String[] args)
     {
-        //Stack<QueueElmt> stackList = new Stack<QueueElmt>();
+        //Stack<Elemen<string>> stackList = new Stack<Elemen<string>>();
         //StackProcessor stackProcessor = new StackProcessor();
 
-        Queue<QueueElmt> queueList = new Queue<QueueElmt>();
+        Queue<Elemen<string>> queueList = new Queue<Elemen<string>>();
         QueueProcessor queueProcessor = new QueueProcessor();
         queueProcessor.setQueue(queueList);
 
-        //QueueElmt a = new QueueElmt("-");
+        //Elemen<string> a = new Elemen<string>("-");
         //queueList.Enqueue(a); 
-        //QueueElmt a = new QueueElmt("-");
-        QueueElmt a = new QueueElmt("1");
+        //Elemen<string> a = new Elemen<string>("-");
+        Elemen<string> a = new Elemen<string>("1");
         queueList.Enqueue(a);
-        a = new QueueElmt("+");
+        a = new Elemen<string>("+");
         queueList.Enqueue(a);
-        a = new QueueElmt("-");
+        a = new Elemen<string>("-");
         queueList.Enqueue(a);
-        a = new QueueElmt("2");
+        a = new Elemen<string>("2");
         queueList.Enqueue(a);
-        a = new QueueElmt("-");
+        a = new Elemen<string>("-");
         queueList.Enqueue(a);
-        a = new QueueElmt("3");
+        a = new Elemen<string>("3");
         queueList.Enqueue(a);
 
         Console.WriteLine(queueProcessor.solveQueue());
