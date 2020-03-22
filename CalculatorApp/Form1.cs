@@ -16,7 +16,6 @@ namespace CalculatorApp
         String operation = "";
         bool operation_pressed = false;
         bool equal_pressed = false;
-        bool exception_raised = false;
         Queue<Elemen<string>> operationQueue;
         QueueProcessor queueOp;
         Double ans = 0;
@@ -40,12 +39,6 @@ namespace CalculatorApp
         {
             
             Button b = (Button)sender;
-            if (exception_raised)
-            {
-                result.Clear();
-                result.Font = new Font(result.Font.FontFamily, 18, result.Font.Style);
-                exception_raised = false;
-            }
             if (b.Text == ".")
             {
                 if (!result.Text.Contains("."))
@@ -78,16 +71,9 @@ namespace CalculatorApp
             Button b = (Button)sender;
             bool Eq = (b.Text == "=");
 
-
             operation = b.Text;
-            if (exception_raised)
-            {
-                result.Clear();
-                result.Font = new Font(result.Font.FontFamily, 18, result.Font.Style);
-                result.Text = "0";
-                exception_raised = false;
-            }
             value = Double.Parse(result.Text);
+            operation_pressed = true;
             if (equal_pressed)
             {
                 if (operation == "√")
@@ -99,16 +85,11 @@ namespace CalculatorApp
                     equation.Text = value + " " + operation;
 
                 }
-
                 equal_pressed = false;
             }
             else
             {
                 if(operation == "√")
-                {
-                    equation.Text += " " + operation;
-                }
-                else if(operation_pressed)
                 {
                     equation.Text += " " + operation;
                 }
@@ -124,10 +105,6 @@ namespace CalculatorApp
             {
                 clicked = new Elemen<String>("akar");
                 operationQueue.Enqueue(clicked);
-            } else if (operation_pressed)
-            {
-                clicked = new Elemen<String>(operation);
-                operationQueue.Enqueue(clicked);
             }
             else
             {
@@ -136,10 +113,6 @@ namespace CalculatorApp
                 operationQueue.Enqueue(clicked);
 
             }
-
-
-            operation_pressed = true;
-
 
         }
 
@@ -160,9 +133,7 @@ namespace CalculatorApp
             }
             catch (CalculatorException exc)
             {
-                result.Font = new Font(result.Font.FontFamily, 12, result.Font.Style);
                 result.Text = exc.Message;
-                exception_raised = true;
             }
             finally
             {
@@ -178,7 +149,6 @@ namespace CalculatorApp
             equation.Text = "";
             value = 0;
             result.Text = "0";
-            operationQueue.Clear();
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -202,14 +172,10 @@ namespace CalculatorApp
             double mcValue;
             Elemen<String> mcElemen;
 
-            if (!exception_raised)
-            {
+            mcValue = Double.Parse(result.Text);
+            mcElemen = new Elemen<string>(result.Text);
 
-                mcValue = Double.Parse(result.Text);
-                mcElemen = new Elemen<string>(result.Text);
-
-                memory.Enqueue(mcElemen);
-            }
+            memory.Enqueue(mcElemen);
 
         }
 

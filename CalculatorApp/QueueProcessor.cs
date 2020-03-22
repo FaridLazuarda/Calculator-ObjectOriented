@@ -128,7 +128,7 @@ namespace CalculatorApp
                             }
                             else
                             {
-                                throw (new ExpressionSyntaxErrorException("Syntax Error : Consecutive Operators"));
+                                throw (new ExpressionSyntaxErrorException("Syntax Error : Two Consecutive Operators"));
                             }
                         }
                         break;
