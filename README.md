@@ -1,5 +1,5 @@
 # Calculator-ObjectOriented
-Tugas Besar 1 IF2210 Pemrograman Berorientasi Objek
+Tugas Besar 1 IF2210 Pemrograman Berorientasi Objek \n
 Dibuat oleh K1-Kelompok 4:
 | Nama             | NIM |
 | ---------------- | --- |
@@ -17,10 +17,13 @@ CalculatorApp
       |   |---Expression
       |---CalculatorException
 ```
-## Cara Compile
 
 ## Cara Run
 ```
 1. Locate Build Folder
 2. Run CalculatorApp.exe
+```
+
+## Screenshot Aplikasi
+
 
