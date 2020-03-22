@@ -1,7 +1,5 @@
 # Calculator-ObjectOriented
 Tugas Besar 1 IF2210 Pemrograman Berorientasi Objek oleh K1-Kelompok 4:
---------------------------
-| K-1 Kelompok 4 |
 | Nama             | NIM |
 | ---------------- | --- |
 | Raras Pradnya Pramudita       | 13518013 |
