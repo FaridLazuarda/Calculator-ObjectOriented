@@ -3,20 +3,35 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-
+/********************************/
+/*          EXPRESSION          */
+/********************************/
 abstract public class Expression
 {
+    /** DESKRIPSI **/
+    /* Expression sebagai base class untuk Terminal, Binary, dan Unary Expression 
+    Kelas-kelas turunan dari kelas ini yang akan melakukan operasi pada suatu ekspresi
+    matematika, yang secara lebih lanjut akan diproses dalam StackProcessor */
+
+    /** DEFAULT CONSTRUCTOR **/ 
     public Expression() { }
+
+    /** abstract method solve() **/
     abstract public double solve();
 }
 
 public class TerminalExpression : Expression
 {
+    /** KAMUS DATA **/
     protected double x;
+
+    /** DEFAULT CONSTRUCTOR **/
     public TerminalExpression(double x)
     {
         this.x = x;
     }
+
+    /** Implementasi abstract method solve() **/
     public override double solve()
     {
         return this.x;
@@ -25,7 +40,14 @@ public class TerminalExpression : Expression
 
 abstract public class UnaryExpression : Expression
 {
+    /** DESKRIPSI **/
+    /* UnaryExpression sebagai base class untuk Positive, Negative, dan Root Expression */
+    /* hanya memiliki 1 atribut Expression x */
+
+    /** KAMUS DATA **/
     protected Expression x;
+
+    /** DEFAULT CONSTRUCTOR **/
     public UnaryExpression(Expression x)
     {
         this.x = x;
@@ -35,16 +57,23 @@ abstract public class UnaryExpression : Expression
 
 public class PositiveExpression : UnaryExpression
 {
+    /** DEFAULT CONSTRUCTOR **/
     public PositiveExpression(Expression T) : base(T) { }
+
+    /** Implementasi abstract method solve() **/
     public override double solve()
     {
         return x.solve();
     }
 }
 
+
 public class NegativeExpression : UnaryExpression
 {
+    /** DEFAULT CONSTRUCTOR **/
     public NegativeExpression(Expression T) : base(T) { }
+
+    /** Implementasi abstract method solve() **/
     public override double solve()
     {
         return (-1) * x.solve();
@@ -53,11 +82,15 @@ public class NegativeExpression : UnaryExpression
 
 public class RootExpression : UnaryExpression
 {
+    /** DEFAULT CONSTRUCTOR **/
     public RootExpression(Expression T) : base(T) { }
+
+    /** Implementasi abstract method solve() **/
+    /* exception handling untuk akar bilangan negatif */
     public override double solve()
     {
         double result = Math.Sqrt(x.solve());
-        if(!Double.IsNaN(result))
+        if (!Double.IsNaN(result))
         {
             return result;
         }
@@ -65,14 +98,21 @@ public class RootExpression : UnaryExpression
         {
             throw (new NegativeRootException("Exception: Negative value in Root"));
         }
-        
+
     }
 }
 
 abstract public class BinaryExpression : Expression
 {
+    /** DESKRIPSI **/
+    /* Binary sebagai base class untuk Add, Substract, Multiply, dan Divide Expression */
+    /* memiliki 2 atribut Expression, x dan y */
+
+    /** KAMUS DATA **/
     protected Expression x;
     protected Expression y;
+
+    /** DEFAULT CONSTRUCTOR **/
     public BinaryExpression(Expression x, Expression y)
     {
         this.x = x;
@@ -83,7 +123,10 @@ abstract public class BinaryExpression : Expression
 
 public class AddExpression : BinaryExpression
 {
+    /** DEFAULT CONSTRUCTOR **/
     public AddExpression(Expression x, Expression y) : base(x, y) { }
+
+    /** Implementasi abstract method solve() **/
     public override double solve()
     {
         return x.solve() + y.solve();
@@ -92,7 +135,10 @@ public class AddExpression : BinaryExpression
 
 public class SubstractExpression : BinaryExpression
 {
+    /** DEFAULT CONSTRUCTOR **/
     public SubstractExpression(Expression x, Expression y) : base(x, y) { }
+
+    /** Implementasi abstract method solve() **/
     public override double solve()
     {
         return x.solve() - y.solve();
@@ -101,7 +147,10 @@ public class SubstractExpression : BinaryExpression
 
 public class MultiplyExpression : BinaryExpression
 {
+    /** DEFAULT CONSTRUCTOR **/
     public MultiplyExpression(Expression x, Expression y) : base(x, y) { }
+
+    /** Implementasi abstract method solve() **/
     public override double solve()
     {
         return x.solve() * y.solve();
@@ -110,7 +159,11 @@ public class MultiplyExpression : BinaryExpression
 
 public class DivideExpression : BinaryExpression
 {
+    /** DEFAULT CONSTRUCTOR **/
     public DivideExpression(Expression x, Expression y) : base(x, y) { }
+
+    /** Implementasi abstract method solve() **/
+    /* Exception handling untuk pembagian dengan bilangan 0 */
     public override double solve()
     {
         double result;
@@ -123,31 +176,48 @@ public class DivideExpression : BinaryExpression
     }
 }
 
-public class Elemen<T> 
+/********************************/
+/*            ELEMEN            */
+/********************************/
+public class Elemen<T>
 {
+    /** DESKRIPSI **/
+    /* Class Elemen adalah class generic.
+    Kelas ini memiliki dua atribut private yakni elmt1 dan elmt2. elmt2 bertipe double,
+    Namun untuk elmt1 akan diinstansiasikan menjadi String dan double. Class Elemen ini 
+    nantinya akan dipakai menjadi elemen dalam Queue untuk QueueProcessor, serta elemen 
+    stack untuk StackProcessor */
+
+    /** KAMUS DATA **/
     protected T elmt1;
     protected double elmt2;
+
+    /** DEFAULT CONSTRUCTOR **/
     public Elemen(T elmt)
     {
-	Type param = typeof(T);	
-	if (typeof(string).IsAssignableFrom(param))
-	{
-		if (elmt.Equals("+") || elmt.Equals("-") || elmt.Equals("*") || elmt.Equals("/") || elmt.Equals("akar"))
-    		{
-			elmt1 = elmt;
-			elmt2 = -1;
-    		}
-    		else 
-    		{
-			string s = "#";
-			elmt1 = (T)(object)s;
-			elmt2 = Convert.ToDouble(elmt);
-    		}
-	}else{
-		elmt1 = elmt;
-		elmt2 = 1;
-	}   
+        Type param = typeof(T);
+        if (typeof(string).IsAssignableFrom(param))
+        {
+            if (elmt.Equals("+") || elmt.Equals("-") || elmt.Equals("*") || elmt.Equals("/") || elmt.Equals("akar"))
+            {
+                elmt1 = elmt;
+                elmt2 = -1;
+            }
+            else
+            {
+                string s = "#";
+                elmt1 = (T)(object)s;
+                elmt2 = Convert.ToDouble(elmt);
+            }
+        }
+        else
+        {
+            elmt1 = elmt;
+            elmt2 = 1;
+        }
     }
+
+    /** GETTER **/
     public T GetItem1()
     {
         return this.elmt1;
@@ -155,13 +225,17 @@ public class Elemen<T>
     public double GetItem2()
     {
         return this.elmt2;
-    } 
+    }
 }
 
-//namespace CalculatorDefinedException{
-
+/********************************/
+/*     CALCULATOR EXCEPTION     */
+/********************************/
 public class CalculatorException : Exception
 {
+    /* CalculatorException merupakan base class untuk ExpressionSyntaxErrorException,
+    NegativeRootException, dan DivisionByZeroException */
+
     public CalculatorException(string message) : base(message)
     {
 
@@ -169,6 +243,8 @@ public class CalculatorException : Exception
 }
 public class ExpressionSyntaxErrorException : CalculatorException
 {
+    /* ExpressionSyntaxErrorException akan menghandle exception untuk penulisan expression 
+    yang salah, misalnya dua operator ditulis secara consecutive */
     public ExpressionSyntaxErrorException(string message) : base(message)
     {
 
@@ -177,19 +253,22 @@ public class ExpressionSyntaxErrorException : CalculatorException
 
 public class NegativeRootException : CalculatorException
 {
-    public NegativeRootException(string message): base(message)
+    /* NegativeRootException menghandle exception untuk ekspresi dengan akar dari bilangan
+    negatif */
+    public NegativeRootException(string message) : base(message)
     {
     }
 }
 
 public class DivisionByZeroException : CalculatorException
 {
-    public DivisionByZeroException(string message): base(message)
+    /* DivisionByZeroException menghandle exception untuk ekspresi yang menghasilkan
+    pembagian dengan bilangan 0 */
+    public DivisionByZeroException(string message) : base(message)
     {
 
     }
 }
-
 
 /********************************/
 /*         QUEUEPROCESSOR       */
