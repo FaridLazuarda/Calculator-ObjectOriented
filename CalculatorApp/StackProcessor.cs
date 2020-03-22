@@ -216,28 +216,50 @@ public class QueueProcessor
                     // 0 -> pembacaan selesai dan berhasil
                     // 1 -> pembacaan terminal
                     // 2 -> pembacaan operator
-        int negCount=0; //Penanda banyak minus yang berurutan
+        int negCount;   // Penanda banyak minus yang berurutan
+        bool insert;
 
         /** ALGORITMA **/
         tempQueue = new Queue<QueueElmt>();
+        negCount = 0;
         state = 1;  // dimulai dengan pembacaan terminal
 
+        // 1. Loop sampai semua elemen InfixQueue habis
         while (this.expressionInfixQueue.Count != 0)
         {
-            
+            // 2. Setiap elemen di-dequeue dan ditangani sesuai state sekarang
             tempElmt = this.expressionInfixQueue.Dequeue();
             switch (state){
+                // 2.1  State 1 menandakan state untuk membaca terminal
+                //      Kasus yang ada di sini adalah:
+                //      1. Jika yang ditemukan terminal, maka berarti tidak ada masalah dan langsung dimasukkan
+                //      2. Jika yang ditemukan operator, dicek terlebih dahulu operator apakah itu
+                //         Jika ditemukan operator unary (seperti akar), maka diperbolehkan
+                //         Kasus jika bertemu operator unary negatif yang pada program ini ditangani operator yang sama
+                //         dengan binary pengurangan, dilakukan penandaan bahwa sudah ada 1 minus agar pada pembacaan terminal
+                //         selanjutnya nilai negatif dapat dimasukkan ke queue (hanya jika ada 1 minus)
+                //      3. Jika yang ditemukan operator, tetapi bukan "-" ataupun "akar", maka secara langsung dapat
+                //         disimpulkan sintaks error dalam ekspresi dan dikeluarkan exception
                 case 1:
+                    //  Penanganan terminal
                     if (tempElmt.GetItem1() == "#")
                     {
+            
                         state = 2;
+                        // Penanganan terminal yang sebelumnya operator negatif
+                        if(negCount == 1)
+                        {
+                            Console.WriteLine("neg");
+                            tempElmt = new QueueElmt((tempElmt.GetItem2() * -1).ToString());
+                        }
                         Console.WriteLine("angka {0}", tempElmt.GetItem2());
                     }
-                    else
-                    {
+                    else    // Penanganan Operator
+                    {   
                         if (tempElmt.GetItem1() == "-" && negCount < 1)
                         {
                             negCount++;
+                            continue;
                         }
                         else if(tempElmt.GetItem1() == "akar")
                         {
@@ -249,23 +271,30 @@ public class QueueProcessor
                         }
                     }
                     break;
+                // 2.2  State 2 menandakan state untuk membaca operator
+                //      State 2 cenderung lebih sederhana karena hanya tinggal membaca operator
+                //      Tidak dilakukan pembacaan terminal karena sudah ada prekondisi dari GUI
+                //      tidak ada dua terminal yang berurutan
+                //      Pada kasus ini hanya me-set state kembali menjadi 1 dan mereset negCount
                 case 2:
                     if(tempElmt.GetItem1() != "#")
                     {
                         state = 1;
                         negCount = 0;
-                        Console.WriteLine("operator {0}", tempElmt.GetItem1());
-
                     }
                     break;
             }
+            //  3. Elemen yang di dequeue disimpan sementara dalam queue temporary
             tempQueue.Enqueue(tempElmt);
+            
                 
         }
 
+        //  4. Dilakukan pengopian kembali queue yang sudah benar dari temporary ke InfixQueue
         while(tempQueue.Count != 0)
         {
             tempElmt = tempQueue.Dequeue();
+            Console.WriteLine("< {0} , {1} >", tempElmt.GetItem1(), tempElmt.GetItem2());
             this.expressionInfixQueue.Enqueue(tempElmt);
         }
 
@@ -525,25 +554,20 @@ public class StackProcessorTest
         QueueProcessor queueProcessor = new QueueProcessor();
         queueProcessor.setQueue(queueList);
 
+        //QueueElmt a = new QueueElmt("-");
+        //queueList.Enqueue(a); 
+        //QueueElmt a = new QueueElmt("-");
         QueueElmt a = new QueueElmt("1");
         queueList.Enqueue(a);
+        a = new QueueElmt("+");
+        queueList.Enqueue(a); 
         a = new QueueElmt("-");
         queueList.Enqueue(a);
         a = new QueueElmt("2");
         queueList.Enqueue(a);
-        a = new QueueElmt("*");
-        queueList.Enqueue(a);
-        a = new QueueElmt("4");
-        queueList.Enqueue(a);
         a = new QueueElmt("-");
         queueList.Enqueue(a);
-        a = new QueueElmt("akar");
-        queueList.Enqueue(a);
-        a = new QueueElmt("akar");
-        queueList.Enqueue(a);
-        a = new QueueElmt("akar");
-        queueList.Enqueue(a);
-        a = new QueueElmt("256");
+        a = new QueueElmt("3");
         queueList.Enqueue(a);
 
         Console.WriteLine(queueProcessor.solveQueue());
