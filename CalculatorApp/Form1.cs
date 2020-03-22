@@ -17,6 +17,7 @@ namespace CalculatorApp
         bool operation_pressed = false;
         Queue<Elemen<string>> operationQueue;
         QueueProcessor queueOp;
+        Double ans = 0;
         public Form1()
         {
             InitializeComponent();
@@ -79,7 +80,9 @@ namespace CalculatorApp
             else
             {
                 Console.WriteLine("hasil");
+                ans = ans + queueOp.solveQueue();
                 Console.WriteLine(queueOp.solveQueue());
+                Console.WriteLine(ans);
             }
 
             /* while (!Eq)
@@ -152,6 +155,12 @@ namespace CalculatorApp
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void ansButton_click(object sender, EventArgs e)
+        {
+            result.Text = ans.ToString();
+            Console.WriteLine(ans);
         }
     }
 }
