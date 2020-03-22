@@ -52,10 +52,27 @@ namespace CalculatorApp
         private void operator_Click(object sender, EventArgs e)
         {
             Button b = (Button)sender;
-            operation = b.Text;
-            value = Double.Parse(result.Text);
-            operation_pressed = true;
-            equation.Text = value + " " +operation;
+            bool Eq = false;
+            Queue<Elemen<string>> operationQueue = new Queue<Elemen<string>>();
+            QueueProcessor queueOp = new QueueProcessor();
+            queueOp.setQueue(operationQueue);
+
+            while (!Eq)
+            {
+                operation = b.Text;
+                value = Double.Parse(result.Text);
+                operation_pressed = true;
+                equation.Text = value + " " + operation;
+
+                Elemen<string> clicked = new Elemen<string>(b.Text);
+                operationQueue.Enqueue(clicked);
+
+                if (b.Text == "=")
+                {
+                    Eq = true;
+                }
+            }
+            Console.WriteLine(queueOp.solveQueue());
         }
 
         private void button18_Click(object sender, EventArgs e)

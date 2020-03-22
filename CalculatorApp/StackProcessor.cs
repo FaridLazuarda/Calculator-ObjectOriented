@@ -557,34 +557,34 @@ public class QueueProcessor
 }
 
 
-public class StackProcessorTest
-{
-    public static void Main(String[] args)
-    {
-        //Stack<Elemen<string>> stackList = new Stack<Elemen<string>>();
-        //StackProcessor stackProcessor = new StackProcessor();
+//public class StackProcessorTest
+//{
+//    public static void Main(String[] args)
+//    {
+//        //Stack<Elemen<string>> stackList = new Stack<Elemen<string>>();
+//        //StackProcessor stackProcessor = new StackProcessor();
+//
+//        Queue<Elemen<string>> queueList = new Queue<Elemen<string>>();
+//        QueueProcessor queueProcessor = new QueueProcessor();
+//        queueProcessor.setQueue(queueList);
+//
+//        //Elemen<string> a = new Elemen<string>("-");
+///        //queueList.Enqueue(a); 
+//        //Elemen<string> a = new Elemen<string>("-");
+//        Elemen<string> a = new Elemen<string>("1");
+//        queueList.Enqueue(a);
+//        a = new Elemen<string>("+");
+//        queueList.Enqueue(a);
+//        a = new Elemen<string>("-");
+//        queueList.Enqueue(a);
+//        a = new Elemen<string>("2");
+//        queueList.Enqueue(a);
+//        a = new Elemen<string>("-");
+//        queueList.Enqueue(a);
+//        a = new Elemen<string>("3");
+//       queueList.Enqueue(a);
 
-        Queue<Elemen<string>> queueList = new Queue<Elemen<string>>();
-        QueueProcessor queueProcessor = new QueueProcessor();
-        queueProcessor.setQueue(queueList);
+//        Console.WriteLine(queueProcessor.solveQueue());
 
-        //Elemen<string> a = new Elemen<string>("-");
-        //queueList.Enqueue(a); 
-        //Elemen<string> a = new Elemen<string>("-");
-        Elemen<string> a = new Elemen<string>("1");
-        queueList.Enqueue(a);
-        a = new Elemen<string>("+");
-        queueList.Enqueue(a);
-        a = new Elemen<string>("-");
-        queueList.Enqueue(a);
-        a = new Elemen<string>("2");
-        queueList.Enqueue(a);
-        a = new Elemen<string>("-");
-        queueList.Enqueue(a);
-        a = new Elemen<string>("3");
-        queueList.Enqueue(a);
-
-        Console.WriteLine(queueProcessor.solveQueue());
-
-    }
-}
+//    }
+//}
