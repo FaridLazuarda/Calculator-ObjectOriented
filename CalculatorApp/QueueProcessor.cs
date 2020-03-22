@@ -14,9 +14,6 @@ namespace CalculatorApp
         /* KAMUS DATA */
         Queue<Elemen<string>> expressionInfixQueue;
         Queue<Elemen<string>> expressionPostfixQueue;
-        TerminalExpression terminal1, terminal2;
-        String expresionOp;
-        int terminalState;
 
         /***** DEFAULT CONSTRUCTOR ******/
         public QueueProcessor()
@@ -55,13 +52,16 @@ namespace CalculatorApp
             try
             {
                 parseInfixExpression();
-                printQueue(this.expressionInfixQueue);
                 parseInfixToPostfix();
                 result = solvePostfixQueue();
             }
             catch (CalculatorException e)
             {
                 throw (e);
+            }
+            finally
+            {
+                this.expressionInfixQueue.Clear();
             }
 
             return result;
@@ -75,13 +75,11 @@ namespace CalculatorApp
             /** KAMUS LOKAL **/
             Queue<Elemen<string>> tempQueue;
             Elemen<string> tempElmt;
-            String operatorString;
             int state;  // integer yang melambangkan keadaan pembacaan sekarang
                         // 0 -> pembacaan selesai dan berhasil
                         // 1 -> pembacaan terminal
                         // 2 -> pembacaan operator
             int negCount;   // Penanda banyak minus yang berurutan
-            bool insert;
 
             /** ALGORITMA **/
             tempQueue = new Queue<Elemen<string>>();
@@ -114,10 +112,8 @@ namespace CalculatorApp
                             // Penanganan terminal yang sebelumnya operator negatif
                             if (negCount == 1)
                             {
-                                Console.WriteLine("neg");
                                 tempElmt = new Elemen<string>((tempElmt.GetItem2() * -1).ToString());
                             }
-                            Console.WriteLine("angka {0}", tempElmt.GetItem2());
                         }
                         else    // Penanganan Operator
                         {
@@ -159,7 +155,6 @@ namespace CalculatorApp
             while (tempQueue.Count != 0)
             {
                 tempElmt = tempQueue.Dequeue();
-                Console.WriteLine("< {0} , {1} >", tempElmt.GetItem1(), tempElmt.GetItem2());
                 this.expressionInfixQueue.Enqueue(tempElmt);
             }
 
@@ -180,7 +175,7 @@ namespace CalculatorApp
             /** ALGORITMA **/
             operatorStack = new Stack<Elemen<string>>();
 
-            clearQueue(ref expressionPostfixQueue);
+            this.expressionPostfixQueue.Clear();
 
             while (this.expressionInfixQueue.Count != 0)
             {
@@ -252,7 +247,6 @@ namespace CalculatorApp
             Expression exp;
 
             /** ALGORITMA **/
-            printQueue(this.expressionPostfixQueue);
             operationStack = new Stack<TerminalExpression>();
             while (this.expressionPostfixQueue.Count != 0)
             {
@@ -261,7 +255,6 @@ namespace CalculatorApp
                 {
                     term = new TerminalExpression(queueTemp.GetItem2());
                     operationStack.Push(term);
-                    Console.WriteLine(queueTemp.GetItem2());
                 }
                 else
                 {
@@ -316,29 +309,30 @@ namespace CalculatorApp
             while (queue.Count != 0)
             {
                 temp = queue.Dequeue();
-                Console.WriteLine("< " + temp.GetItem1() + " , " + temp.GetItem2() + " >");
+                if (temp.GetItem1() != "#")
+                {
+                    if (temp.GetItem1() == "akar")
+                    {
+                        Console.Write("√");
+                    }
+                    else
+                    {
+                        Console.Write(temp.GetItem1());
+
+                    }
+                }
+                else
+                {
+                    Console.Write(temp.GetItem2());
+                }
                 tempQueue.Enqueue(temp);
             }
+            Console.WriteLine("");
 
             while (tempQueue.Count != 0)
             {
                 temp = tempQueue.Dequeue();
                 queue.Enqueue(temp);
-            }
-        }
-
-        private void clearQueue(ref Queue<Elemen<string>> queue)
-        {
-            /** DESKRIPSI **/
-            /* Mengosongkan Queue sehingga dapat digunakan seperti awal */
-
-            /** KAMUS DATA **/
-            Elemen<string> temp;
-
-            /** ALGORITMA **/
-            while (queue.Count != 0)
-            {
-                temp = queue.Dequeue();
             }
         }
 

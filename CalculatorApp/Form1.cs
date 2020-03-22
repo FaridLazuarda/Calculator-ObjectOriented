@@ -15,15 +15,20 @@ namespace CalculatorApp
         Double value = 0;
         String operation = "";
         bool operation_pressed = false;
+        bool equal_pressed = false;
         Queue<Elemen<string>> operationQueue;
         QueueProcessor queueOp;
         Double ans = 0;
+
+        Queue<Elemen<string>> memory;
+
         public Form1()
         {
             InitializeComponent();
             operationQueue = new Queue<Elemen<string>>();
             queueOp = new QueueProcessor();
             queueOp.setQueue(operationQueue);
+            memory = new Queue<Elemen<string>>();
         }
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
@@ -43,106 +48,105 @@ namespace CalculatorApp
             }
             else
             {
-                if ((result.Text == "0") || (operation_pressed))
+                if ((result.Text == "0") || (operation_pressed) || (equal_pressed))
                 {
                     result.Clear();
+                    if (equal_pressed)
+                    {
+                        equation.Text = "";
+                    }
                 }
                 result.Text = result.Text + b.Text;
             }
             operation_pressed = false;
+            equal_pressed = false;
 
 
         }
 
-        private void button16_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void operator_Click(object sender, EventArgs e)
         {
+            Elemen<String> clicked;
             Button b = (Button)sender;
             bool Eq = (b.Text == "=");
 
             operation = b.Text;
             value = Double.Parse(result.Text);
             operation_pressed = true;
-            equation.Text += " " + value + " " + operation;
+            if (equal_pressed)
+            {
+                if (operation == "√")
+                {
+                    equation.Text = " " + operation;
+                }
+                else
+                {
+                    equation.Text = value + " " + operation;
+
+                }
+                equal_pressed = false;
+            }
+            else
+            {
+                if(operation == "√")
+                {
+                    equation.Text += " " + operation;
+                }
+                else
+                {
+                    equation.Text += " " + value + " " + operation;
+
+                }
+            }
 
             Elemen<String> operand = new Elemen<String>(value.ToString());
-            Elemen<String> clicked = new Elemen<String>(operation);
-            operationQueue.Enqueue(operand);
-            if (!Eq)
+            if(operation == "√")
             {
-                Console.WriteLine("masuk");
+                clicked = new Elemen<String>("akar");
                 operationQueue.Enqueue(clicked);
             }
             else
             {
-                Console.WriteLine("hasil");
-                ans = ans + queueOp.solveQueue();
-                Console.WriteLine(queueOp.solveQueue());
-                Console.WriteLine(ans);
+                clicked = new Elemen<String>(operation);
+                operationQueue.Enqueue(operand);
+                operationQueue.Enqueue(clicked);
+
             }
 
-            /* while (!Eq)
-             {
-                 Console.WriteLine("masuk");
-                 operation = b.Text;
-                 value = Double.Parse(result.Text);
-                 operation_pressed = true;
-                 equation.Text = value + " " + operation;
-
-                 Elemen<string> operand = new Elemen<String>(value.ToString());
-                 Elemen<string> clicked = new Elemen<string>(b.Text);
-                 operationQueue.Enqueue(operand);
-
-                 if (b.Text == "=")
-                 {
-                     Eq = true;
-                 }
-                 else
-                 {
-                     operationQueue.Enqueue(clicked);
-                 }
-             }*/
         }
 
         private void button18_Click(object sender, EventArgs e)
         {
+            double solveRes;
             value = Double.Parse(result.Text);
-            equation.Text += " " + value + " " + operation;
+            equation.Text += " " + value;
 
             Elemen<String> operand = new Elemen<String>(value.ToString());
             operationQueue.Enqueue(operand);
-            Console.WriteLine("hasil");
-            double solveRes = queueOp.solveQueue();
-            Console.WriteLine(solveRes);
-            result.Text = (solveRes).ToString();
 
-            /*equation.Text = "";
-            switch (operation)
+            try
             {
-                case "+":
-                    result.Text = (value + Double.Parse(result.Text)).ToString();
-                    break;
-                case "-":
-                    result.Text = (value - Double.Parse(result.Text)).ToString();
-                    break;
-                case "*":
-                    result.Text = (value * Double.Parse(result.Text)).ToString();
-                    break;
-                case "/":
-                    result.Text = (value / Double.Parse(result.Text)).ToString();
-                    break;
-                default:
-                    break;
-            }//end switch*/
+                solveRes = queueOp.solveQueue();
+                result.Text = (solveRes).ToString();
+                ans = solveRes;
+            }
+            catch (CalculatorException exc)
+            {
+                result.Text = exc.Message;
+            }
+            finally
+            {
+                equal_pressed = true;
+            }
+
+
         }
 
         private void button15_Click(object sender, EventArgs e)
         {
             result.Clear();
+            equation.Text = "";
             value = 0;
             result.Text = "0";
         }
@@ -159,8 +163,37 @@ namespace CalculatorApp
 
         private void ansButton_click(object sender, EventArgs e)
         {
+            result.Clear();
             result.Text = ans.ToString();
-            Console.WriteLine(ans);
+        }
+
+        private void mcButton_Click(object sender, EventArgs e)
+        {
+            double mcValue;
+            Elemen<String> mcElemen;
+
+            mcValue = Double.Parse(result.Text);
+            mcElemen = new Elemen<string>(result.Text);
+
+            memory.Enqueue(mcElemen);
+
+        }
+
+        private void mrButton_Click(object sender, EventArgs e)
+        {
+            Elemen<string> mrValue;
+
+            try
+            {
+                mrValue = memory.Dequeue();
+                result.Clear();
+                result.Text = mrValue.GetItem2().ToString();
+
+            } catch (InvalidOperationException exc)
+            {
+                
+            }
+
         }
     }
 }
